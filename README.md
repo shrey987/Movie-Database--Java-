@@ -2,13 +2,13 @@
 
 👍 Developed a basic prototype of movie functionality platform in java where users can INSERT, RETRIEVE and DELETE movie data.
 
-Language: :Java
+Language: Java
 Database: SQLITE
 Connection using JDBC
 
 Commands used (Commands here are mentioned with respect to windows 64-bit PC) :-
 
--> Command Line Shell for SQLITE :- sqlite3
+  Command Line Shell for SQLITE :- sqlite3
 
   1.Create Database :- sqlite3 DatabaseName.db
   2.Open Database :- .open DatabaseName.db
