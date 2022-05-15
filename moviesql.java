@@ -9,7 +9,6 @@ public class moviesql {
 	static Statement statement;
 	moviesql()
 	{
-		System.out.println("DD");
    	     String jdbcUrl="jdbc:sqlite:/D:\\SQLITE\\sqlite-tools-win32-x86-3380500\\moviedb.db";
    	     try
    	     {
