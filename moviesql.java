@@ -10,12 +10,12 @@ public class moviesql {
 	moviesql()
 	{
 		System.out.println("DD");
-   	     String jdbcUrl="jdbc:sqlite:/D:\\SQLITE\\sqlite-tools-win32-x86-3380500\\usersdb.db";
+   	     String jdbcUrl="jdbc:sqlite:/D:\\SQLITE\\sqlite-tools-win32-x86-3380500\\moviedb.db";
    	     try
    	     {
    		    Connection connection=DriverManager.getConnection(jdbcUrl);
    		    statement= connection.createStatement();
-   		    System.out.println("Connection Succesfull");
+   		    System.out.println("Connection Successfull");
    	     }
    	     catch(SQLException e)
    	     {
@@ -24,23 +24,27 @@ public class moviesql {
 	}
      public static void main(String[] args)
      {
-    	 Scanner obj=new Scanner(System.in);
+    	
     	 moviesql db=new moviesql();
     	 db.createtable();
     	 boolean flag=true;
-    	 int choice;
-    	 while(flag==true)
-    	 {
-    		
+    	 do
+    	 {   Scanner obj=new Scanner(System.in);
     		 System.out.println("Enter your choice ");
-        	 System.out.println("1.Insert Data in Table");
-        	 choice=4;
-        	 System.out.println("WW");
-        	 choice=obj.nextInt();
-        	 System.out.println("WW2");
+        	 System.out.println("1.Insert Data in Table\n2.Display complete data\n3.Display data of particular Actors\n4.Exit");
+        	 int choice=5;
+        	 try
+        	 {
+        		 choice=obj.nextInt();
+        	 }
+        	 catch(Exception e)
+        	 {
+        		 System.out.println("Please Enter valid datatype");
+//        		 e.printStackTrace();
+        	 }
         	 switch(choice)
         	 {
-        	 case 1:db.insert();
+        	 case 1:insert();
         	 break;
         	 case 2: db.query1();
         	 break;
@@ -48,10 +52,16 @@ public class moviesql {
         	 break;
         	 case 4:
         		 flag=false;
+        		 db.droptable();
+        		 break;
+        	 case 5:
+        		 System.out.println("Please Enter a Valid operation type");
         		 break;
         	 }
-    	 }
-    	 obj.close();
+    	 }while(flag==true);
+		 System.exit(0);
+    	 return ;
+    	
      }
      public void createtable()
      {
@@ -59,12 +69,14 @@ public class moviesql {
 		 {
 			 String table="CREATE TABLE moviedatabase (moviename varchar(30),lead_actor varchar(30),lead_actress varchar(30), release_date date, dir_name varchar(30))";
 			 statement.executeUpdate(table);
-			 System.out.println("Table Inserted Successfully ");
+			 System.out.println("Table Created Successfully ");
+			 System.out.println();
 		 }
 		 catch(SQLException e)
 		 {
 			 System.out.println("Table Not Created : ERROR");
-			 e.printStackTrace();
+			 System.exit(0);
+//			 e.printStackTrace();
 		 }
     	 return ;
      }
@@ -75,11 +87,11 @@ public class moviesql {
     	 {
     		 System.out.println("Enter the name of the Actor whose data is to be retrieved");
     		 String name=obj.next();
-    		 String insert="SELECT * FROM moviedatabase WHERE name='"+name+"'";
+    		 String insert="SELECT * FROM moviedatabase WHERE lead_actor='"+name+"'";
     		 ResultSet result = statement.executeQuery(insert);
+    		 int id=1;
     		 while(result.next())
     		 {
-    			 Integer id=result.getInt("rowid");
     			 String moviename=result.getString("moviename");
     			 String actressname=result.getString("lead_actress");
     			 String date=result.getString("release_date");
@@ -92,15 +104,21 @@ public class moviesql {
     			 System.out.println("ReleaseDate :" + date);
     			 System.out.println("Director :" + dirname);
     			 System.out.println();
+    			 id=id+1;
     		 }
+    		 if(id==0)
+    		 {
+    			 System.out.println("No Data to Display");
+    		 }
+    		 System.out.println("------------------------------------------");
+    		 System.out.println();
     	 }
     	 catch(SQLException e)
     	 {
     		 e.printStackTrace();
     	 }
-    	 obj.close();
      }
-     public  void insert()
+     public  static void insert()
      {
     	 Scanner obj=new Scanner(System.in);
     	 try
@@ -119,18 +137,20 @@ public class moviesql {
 			 String insert1="INSERT INTO `moviedatabase` (moviename,lead_actor,lead_actress,release_date,dir_name) VALUES ('"+ movie +"','"+leadm+"','"+lead_f+"','"+date+"','"+dir+"')";
 			 statement.executeUpdate(insert1);
 			 System.out.println("Values Inserted Successfully ");
+			 System.out.println();
+			 System.out.println("------------------------------------------");
+			 System.out.println();
 		 }
 		 catch(SQLException e)
 		 {
 			 System.out.println("ERROR  ");
 			 e.printStackTrace();
 		 }
-    	 obj.close();
     	 return ;
      }
      public  void query1()
      {
-    	 String sql="SELECT rowid,* FROM  moviesdatabase";
+    	 String sql="SELECT rowid,* FROM  moviedatabase";
     	 try
     	 {
 		 ResultSet result = statement.executeQuery(sql);
@@ -150,14 +170,29 @@ public class moviesql {
 			 System.out.println("Director :" + dirname);
 			 System.out.println();
 		 }
+		 System.out.println("------------------------------------------");
+		 System.out.println();
     	 }
     	 catch(SQLException e)
     	 {
     		 System.out.println("ERROR");
     		 e.printStackTrace();
+    	 } 
+     }
+     public void droptable()
+     {
+    	 String q="drop table moviedatabase";
+    	 try
+    	 {
+    		 statement.executeUpdate(q);
+    		 System.out.println("Table Dropped");
+    		 System.out.println("---------Program Ends--------");
+    	 }
+    	 catch(SQLException e)
+    	 {
+    		 System.out.println("Drop Query Error");
+    		 e.printStackTrace();
     	 }
      }
 }
-
-
 
